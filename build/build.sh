@@ -1,0 +1,1 @@
+goxc -os="linux darwin windows freebsd openbsd" -arch="386 amd64 arm" -n=ConstantTableProcessor -pv=1.0 -wd=../src -d=./release -include=*.go,README*,LICENSE*
