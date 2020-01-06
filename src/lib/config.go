@@ -1,13 +1,13 @@
 package lib
 
 import (
-	"flag"
 	"errors"
-	"github.com/xuzhuoxi/infra-go/osxu"
-	"strings"
+	"flag"
 	"fmt"
-	"io/ioutil"
 	"github.com/json-iterator/go"
+	"github.com/xuzhuoxi/infra-go/osxu"
+	"io/ioutil"
+	"strings"
 )
 
 type Process struct {
@@ -18,6 +18,7 @@ type Process struct {
 type Processor struct {
 	Source      string //来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。
 	SheetPrefix string //参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。
+	NickRow     int    //别名行号，可选。若无，NameRow值。
 	StartRow    int    //开始行号，可选。若没有则使用StartRow值。
 	Process     []Process
 }
@@ -27,8 +28,9 @@ type Config struct {
 	SourceFolder string //来源目录，可选。若无，Source值要求使用绝对路径。
 	TargetFolder string //目标目录，可选。若无，Target值要求使用绝对路径。
 	SheetPrefix  string //参与Sheet的名称前缀，可选。若无，每个Processor必须配置SheetPrefix值。
+	NickRow      int    //别名行号，可选。若无，使用Excel列号。
 	StartRow     int    //开始行号，可选。若无，每个Processor必须配置StartRow值。
-	Processor    [] Processor
+	Processor    []Processor
 }
 
 func (c *Config) MakeDetailed(BasePath string) error {
@@ -45,6 +47,10 @@ func (c *Config) MakeDetailed(BasePath string) error {
 		c.TargetFolder = osxu.FormatDirPath(BasePath + c.TargetFolder)
 	}
 	for index := range c.Processor {
+		// Source处理
+		c.Processor[index].Source = AppendBaseFolder(c.Processor[index].Source, c.SourceFolder)
+
+		// SheetPrefix处理
 		if c.Processor[index].SheetPrefix == "" && c.SheetPrefix == "" {
 			return errors.New("SheetPrefix Undefined! ")
 		}
@@ -52,6 +58,15 @@ func (c *Config) MakeDetailed(BasePath string) error {
 			c.Processor[index].SheetPrefix = c.SheetPrefix
 		}
 
+		// NickRow处理
+		if c.Processor[index].NickRow == 0 {
+			c.Processor[index].NickRow = c.NickRow
+		}
+		if c.NickRow < 0 {
+			return errors.New("NickRow Should be greater than 0! ")
+		}
+
+		// StartRow处理
 		if c.Processor[index].StartRow == 0 && c.StartRow == 0 {
 			return errors.New("StartRow Undefined! ")
 		}
@@ -112,4 +127,17 @@ func LoadConfig(configFile string) (config *Config, err error) {
 		return nil, err
 	}
 	return config, nil
+}
+
+func AppendBaseFolder(path string, baseFolder string) string {
+	paths := strings.Split(path, ",")
+	rs := ""
+	for index, p := range paths {
+		if index == len(paths)-1 {
+			rs = rs + baseFolder + p
+		} else {
+			rs = rs + baseFolder + p + ","
+		}
+	}
+	return rs
 }

@@ -3,11 +3,13 @@
 	"SourceFolder": "./Source",
 	"TargetFolder": "./Target",
 	"SheetPrefix": "Const_",
-	"StartRow": 1,
+	"NickRow":1,
+	"StartRow": 2,
 	"Processor": [
 		{
-			"Source": "const.xlsx",
+			"Source": "const.",
 			"SheetPrefix": "Const_",
+			"NickRow":1,
 			"StartRow": 1,
 			"Process": [
 				{
@@ -22,10 +24,12 @@
 		"SourceFolder": "来源目录，可选。若无，Source值要求使用绝对路径。",
 		"TargetFolder": "目标目录，可选。若无，Target值要求使用绝对路径。",
 		"SheetPrefix": "参与Sheet的名称前缀，可选。若无，每个Processor必须配置SheetPrefix值。",
+		"NickRow": "别名行号，可选。若无，使用Excel列号。",
 		"StartRow": "开始行号，可选。若无，每个Processor必须配置StartRow值。",
 
 		"Processor.Source": "来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。",
 		"Processor.SheetPrefix": "参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。",
+		"Processor.NickRow": "别名行号，可选。若无，NameRow值。",
 		"Processor.StartRow": "开始行号，可选。若没有则使用StartRow值。",
 
 		"Processor.Process.Temp": "使用模板文件名",
