@@ -24,5 +24,5 @@ func TestLoadTemplate(t *testing.T) {
 	//datas2["A3"] = "B3"
 	//datas2["A4"] = "B4"
 
-	temp.temp.Execute(os.Stdout, datas)
+	temp.Template.Execute(os.Stdout, datas)
 }

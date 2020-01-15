@@ -15,12 +15,21 @@ type Process struct {
 	Target string //输出文件名
 }
 
+func (p Process) String() string {
+	return fmt.Sprintf("Process{Temp=\"%s\", Target=\"%s\"}", p.Temp, p.Target)
+}
+
 type Processor struct {
 	Source      string //来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。
 	SheetPrefix string //参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。
 	NickRow     int    //别名行号，可选。若无，NameRow值。
 	StartRow    int    //开始行号，可选。若没有则使用StartRow值。
 	Process     []Process
+}
+
+func (p Processor) String() string {
+	return fmt.Sprintf("Processor{Source=\"%s\", SheetPrefix=\"%s\", NickRow=\"%d\", StartRow=\"%d\", Process=\"%s\"}",
+		p.Source, p.SheetPrefix, p.NickRow, p.StartRow, fmt.Sprint(p.Process))
 }
 
 type Config struct {
@@ -31,6 +40,11 @@ type Config struct {
 	NickRow      int    //别名行号，可选。若无，使用Excel列号。
 	StartRow     int    //开始行号，可选。若无，每个Processor必须配置StartRow值。
 	Processor    []Processor
+}
+
+func (c *Config) String() string {
+	return fmt.Sprintf("Config{\n TempFolder=%s\n SourceFolder=%s\n TargetFolder=%s\n SheetPrefix=%s\n NickRow=%d\n StartRow=%d\n Processor=%s\n}",
+		c.TempFolder, c.SourceFolder, c.TargetFolder, c.SheetPrefix, c.NickRow, c.StartRow, fmt.Sprint(c.Processor))
 }
 
 func (c *Config) MakeDetailed(BasePath string) error {
@@ -96,7 +110,7 @@ type Flag struct {
 // -base 	可选	自定义基目录	字符串路径，文件夹或文件,"./"开头视为相对路径
 // -config 	配置文件，默认为config.json
 func ParseFlag() (fg *Flag, err error) {
-	base := flag.String("base", "", "Input Base Path! ")
+	base := flag.String("base", "./", "Input Base Path! ")
 	config := flag.String("config", "config.json", "Config File! ")
 	flag.Parse()
 

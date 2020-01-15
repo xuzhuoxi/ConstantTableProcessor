@@ -8,37 +8,35 @@ import (
 
 func TestLoadExcel(t *testing.T) {
 	path := osxu.RunningBaseDir() + "Source/const.xlsx"
-	excel, err := LoadExcel(path)
+	excelProxy := &ExcelProxy{}
+	err := excelProxy.LoadSheets(path, "Const_", 0)
 	if nil != err {
 		fmt.Println(err)
 		return
 	}
-	excel.LoadSheets("Count_", 0)
-	rows, err := excel.ExcelFile.GetRows("Const_A")
+
+	err = excelProxy.MergedRowsByFilter(2, func(row *ExcelRow) bool {
+		return !row.Empty()
+	})
+	//err = excelProxy.MergedRows(2)
 	if nil != err {
 		fmt.Println(err)
 		return
 	}
-	ln := len(rows)
-	index := 0
-	for index < ln {
-		for _, v := range rows[index] {
-			fmt.Print(v, ",")
-		}
-		fmt.Println()
-		index += 1
-	}
+
+	fmt.Println(excelProxy.Sheets)
+	fmt.Println(excelProxy.DataRows, len(excelProxy.DataRows))
 }
 
-func TestLoadSheets(t *testing.T) {
-	path := osxu.RunningBaseDir() + "Source/const.xlsx"
-	excel, err := LoadExcel(path)
-	if nil != err {
-		fmt.Println(err)
-		return
-	}
-	excel.LoadSheets("Const_", 2)
-	for _, s := range excel.Sheets {
-		fmt.Println(*s)
-	}
-}
+//func TestLoadSheets(t *testing.T) {
+//	path := osxu.RunningBaseDir() + "Source/const.xlsx"
+//	excel, err := LoadExcel(path)
+//	if nil != err {
+//		fmt.Println(err)
+//		return
+//	}
+//	excel.LoadSheets("Const_", 2)
+//	for _, s := range excel.Sheets {
+//		fmt.Println(*s)
+//	}
+//}

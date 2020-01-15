@@ -26,6 +26,15 @@ func (er *ExcelRow) String() string {
 		fmt.Sprint(er.Axis), fmt.Sprint(er.Nick), fmt.Sprint(er.Row))
 }
 
+func (er *ExcelRow) Empty() bool {
+	for _, value := range er.Row {
+		if value != "" && strings.TrimSpace(value) != "" {
+			return false
+		}
+	}
+	return true
+}
+
 // Open to templates
 // 通过索引号取值，索引号从0开始
 func (er *ExcelRow) ValueAtIndex(index int) (value string, err error) {
@@ -85,6 +94,19 @@ func (es *ExcelSheet) SetNick(nick []string) {
 	}
 }
 
+func (es *ExcelSheet) GetDataRows(startIndex int) (rows []*ExcelRow) {
+	return es.Rows[startIndex:]
+}
+
+func (es *ExcelSheet) GetDataRowsByFilter(startIndex int, filter func(row *ExcelRow) bool) (rows []*ExcelRow) {
+	for _, row := range es.Rows[startIndex:] {
+		if filter(row) {
+			rows = append(rows, row)
+		}
+	}
+	return
+}
+
 // Open to templates
 // 通过坐标取值，坐标格式：B4
 func (es *ExcelSheet) ValueAtAxis(axis string) (value string, err error) {
@@ -98,7 +120,8 @@ func (es *ExcelSheet) ValueAtAxis(axis string) (value string, err error) {
 //-----------------
 
 type ExcelProxy struct {
-	Sheets []*ExcelSheet
+	Sheets   []*ExcelSheet
+	DataRows []*ExcelRow
 }
 
 func (ep *ExcelProxy) GetSheet(sheet string) (es *ExcelSheet, err error) {
@@ -108,6 +131,48 @@ func (ep *ExcelProxy) GetSheet(sheet string) (es *ExcelSheet, err error) {
 		}
 	}
 	return nil, errors.New("No Sheet is " + sheet)
+}
+
+// Open to templates
+// 通过Sheet的名称和坐标取值，坐标格式：B4
+func (ep *ExcelProxy) ValueAtAxis(sheet string, axis string) (value string, err error) {
+	s, err := ep.GetSheet(sheet)
+	if nil != err {
+		return "", err
+	}
+	return s.ValueAtAxis(axis)
+}
+
+// 合并全部sheet的行数据。
+// 从StartRow开始。
+// 清除空数据
+func (ep *ExcelProxy) MergedRows(StartRow int) (err error) {
+	var rows []*ExcelRow
+	for _, sheet := range ep.Sheets {
+		rows = append(rows, sheet.GetDataRows(StartRow-1)...)
+	}
+	if len(rows) == 0 {
+		return errors.New("Rows is empty! ")
+	} else {
+		ep.DataRows = rows
+		return nil
+	}
+}
+
+// 合并全部sheet的行数据。
+// 从StartRow开始。
+// 清除空数据
+func (ep *ExcelProxy) MergedRowsByFilter(StartRow int, filter func(row *ExcelRow) bool) (err error) {
+	var rows []*ExcelRow
+	for _, sheet := range ep.Sheets {
+		rows = append(rows, sheet.GetDataRowsByFilter(StartRow-1, filter)...)
+	}
+	if len(rows) == 0 {
+		return errors.New("Rows is empty! ")
+	} else {
+		ep.DataRows = rows
+		return nil
+	}
 }
 
 // 加载SourcePath指定的一个或多个Excel文件。

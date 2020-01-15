@@ -8,29 +8,29 @@ import (
 	"text/template"
 )
 
-var templateMap map[string]*Template
+//var templateMap map[string]*Template
 
 func init() {
-	templateMap = make(map[string]*Template)
+	//templateMap = make(map[string]*Template)
 }
 
 type Template struct {
-	Name string
-	temp *template.Template
+	Name     string
+	Template *template.Template
 }
 
 func (temp *Template) CloneTemplate() *template.Template {
-	if nil != temp.temp {
+	if nil != temp.Template {
 		return nil
 	}
-	clone, _ := temp.temp.Clone()
+	clone, _ := temp.Template.Clone()
 	return clone
 }
 
 func LoadTemplate(TempFile string) (*Template, error) {
-	if temp, ok := templateMap[TempFile]; ok {
-		return temp, nil
-	}
+	//if temp, ok := templateMap[TempFile]; ok {
+	//	return temp, nil
+	//}
 	if !osxu.IsExist(TempFile) {
 		return nil, errors.New(fmt.Sprintf("Templete File Not Found: \"%s\"", TempFile))
 	}
@@ -43,7 +43,7 @@ func LoadTemplate(TempFile string) (*Template, error) {
 	if nil != err {
 		return nil, err
 	}
-	rs := &Template{Name: TempFile, temp: temp}
-	templateMap[TempFile] = rs
+	rs := &Template{Name: TempFile, Template: temp}
+	//templateMap[TempFile] = rs
 	return rs, nil
 }

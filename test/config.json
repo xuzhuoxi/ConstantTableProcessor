@@ -3,18 +3,18 @@
 	"SourceFolder": "./Source",
 	"TargetFolder": "./Target",
 	"SheetPrefix": "Const_",
-	"NickRow":1,
+	"NickRow":0,
 	"StartRow": 2,
 	"Processor": [
 		{
-			"Source": "const.",
+			"Source": "const.xlsx",
 			"SheetPrefix": "Const_",
-			"NickRow":1,
-			"StartRow": 1,
+			"NickRow":0,
+			"StartRow": 2,
 			"Process": [
 				{
 					"Temp": "const.tmp",
-					"Target": "const.go"
+					"Target": "const.tg"
 				}
 			]
 		}
