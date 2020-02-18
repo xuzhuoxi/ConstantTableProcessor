@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/xuzhuoxi/infra-go/osxu"
+	"io"
 	"io/ioutil"
 	"text/template"
 )
@@ -27,23 +28,46 @@ func (temp *Template) CloneTemplate() *template.Template {
 	return clone
 }
 
-func LoadTemplate(TempFile string) (*Template, error) {
-	//if temp, ok := templateMap[TempFile]; ok {
+func (temp *Template) Execute(wr io.Writer, data interface{}) error {
+	return temp.Template.Execute(wr, data)
+}
+
+func (temp *Template) ExecuteTemplate(wr io.Writer, data interface{}) error {
+	return temp.Template.ExecuteTemplate(wr, temp.Name, data)
+}
+
+func (temp *Template) ExecuteTemplateByName(wr io.Writer, name string, data interface{}) error {
+	return temp.Template.ExecuteTemplate(wr, name, data)
+}
+
+func LoadTemplate(tempFile string) (*Template, error) {
+	//if temp, ok := templateMap[tempFile]; ok {
 	//	return temp, nil
 	//}
-	if !osxu.IsExist(TempFile) {
-		return nil, errors.New(fmt.Sprintf("Templete File Not Found: \"%s\"", TempFile))
+	if !osxu.IsExist(tempFile) {
+		return nil, errors.New(fmt.Sprintf("Templete File Not Found: \"%s\"", tempFile))
 	}
-	body, err := ioutil.ReadFile(TempFile)
+	body, err := ioutil.ReadFile(tempFile)
 	if nil != err {
 		return nil, err
 	}
 	text := string(body)
-	temp, err := template.New(TempFile).Parse(text)
+	temp, err := template.New(tempFile).Parse(text)
 	if nil != err {
 		return nil, err
 	}
-	rs := &Template{Name: TempFile, Template: temp}
-	//templateMap[TempFile] = rs
+	_, name := osxu.SplitFilePath(tempFile)
+	rs := &Template{Name: name, Template: temp}
+	//templateMap[tempFile] = rs
+	return rs, nil
+}
+
+func LoadTemplates(tempFiles []string) (*Template, error) {
+	temp, err := template.ParseFiles(tempFiles...)
+	if nil != err {
+		return nil, err
+	}
+	_, name := osxu.SplitFilePath(tempFiles[0])
+	rs := &Template{Name: name, Template: temp}
 	return rs, nil
 }

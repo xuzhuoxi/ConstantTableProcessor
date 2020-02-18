@@ -2,17 +2,24 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/xuzhuoxi/ConstantTableProcessor/src/lib"
 	"github.com/xuzhuoxi/infra-go/logx"
+	"github.com/xuzhuoxi/infra-go/mathx"
+	"github.com/xuzhuoxi/infra-go/osxu"
 	"io/ioutil"
 	"os"
+)
+
+const (
+	Name = "ConstantTableProcessor"
 )
 
 func main() {
 	//初始化Logger
 	logger := logx.NewLogger()
 	logger.SetConfig(logx.LogConfig{Type: logx.TypeConsole, Level: logx.LevelAll})
+	logger.SetConfig(logx.LogConfig{Type: logx.TypeRollingFile, Level: logx.LevelAll,
+		FileDir: osxu.RunningBaseDir(), FileName: Name, FileExtName: ".log", MaxSize: 200 * mathx.KB})
 
 	var err error
 	//处理启动参数
@@ -29,7 +36,7 @@ func main() {
 		return
 	}
 	config.MakeDetailed(fg.BasePath)
-	fmt.Println(config)
+	//fmt.Println(config)
 
 	//根据配置进行处理
 	for _, processor := range config.Processor {
@@ -47,13 +54,13 @@ func main() {
 			continue
 		}
 		for _, process := range processor.Process {
-			temp, err := lib.LoadTemplate(process.Temp)
+			temp, err := lib.LoadTemplates(process.Temp)
 			if nil != err {
 				logger.Errorln(err)
 				break
 			}
 			out := bytes.NewBuffer(nil)
-			err = temp.Template.Execute(out, excelProxy)
+			err = temp.ExecuteTemplate(out, excelProxy)
 			if nil != err {
 				logger.Errorln(err)
 				break
@@ -61,4 +68,6 @@ func main() {
 			ioutil.WriteFile(process.Target, out.Bytes(), os.ModePerm)
 		}
 	}
+
+	logger.Infoln("Finish!")
 }

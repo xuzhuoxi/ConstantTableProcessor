@@ -11,8 +11,8 @@ import (
 )
 
 type Process struct {
-	Temp   string //使用模板文件名
-	Target string //输出文件名
+	Temp   []string //使用模板文件名
+	Target string   //输出文件名
 }
 
 func (p Process) String() string {
@@ -95,7 +95,11 @@ func (c *Config) MakeDetailed(BasePath string) error {
 			return errors.New("No Process! ")
 		}
 		for index2 := range c.Processor[index].Process {
-			c.Processor[index].Process[index2].Temp = c.TempFolder + c.Processor[index].Process[index2].Temp
+			var temps []string
+			for _, t := range c.Processor[index].Process[index2].Temp {
+				temps = append(temps, c.TempFolder+t)
+			}
+			c.Processor[index].Process[index2].Temp = temps
 			c.Processor[index].Process[index2].Target = c.TargetFolder + c.Processor[index].Process[index2].Target
 		}
 	}
