@@ -13,7 +13,7 @@
 			"StartRow": 2,
 			"Process": [
 				{
-					"Temp": ["const.tmp"],
+					"Temp": "const.tmp",
 					"Target": "const.tg"
 				}
 			]

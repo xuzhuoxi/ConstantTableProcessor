@@ -6,6 +6,7 @@ import (
 	"github.com/xuzhuoxi/infra-go/osxu"
 	"io"
 	"io/ioutil"
+	"strings"
 	"text/template"
 )
 
@@ -62,12 +63,13 @@ func LoadTemplate(tempFile string) (*Template, error) {
 	return rs, nil
 }
 
-func LoadTemplates(tempFiles []string) (*Template, error) {
-	temp, err := template.ParseFiles(tempFiles...)
+func LoadTemplates(tempFiles string) (*Template, error) {
+	files := strings.Split(tempFiles, ",")
+	temp, err := template.ParseFiles(files...)
 	if nil != err {
 		return nil, err
 	}
-	_, name := osxu.SplitFilePath(tempFiles[0])
+	_, name := osxu.SplitFilePath(files[0])
 	rs := &Template{Name: name, Template: temp}
 	return rs, nil
 }

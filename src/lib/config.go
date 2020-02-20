@@ -11,8 +11,8 @@ import (
 )
 
 type Process struct {
-	Temp   []string //使用模板文件名
-	Target string   //输出文件名
+	Temp   string //使用模板文件名,支持多模板,可用","分隔
+	Target string //输出文件名
 }
 
 func (p Process) String() string {
@@ -47,6 +47,9 @@ func (c *Config) String() string {
 		c.TempFolder, c.SourceFolder, c.TargetFolder, c.SheetPrefix, c.NickRow, c.StartRow, fmt.Sprint(c.Processor))
 }
 
+// 对原始配置数据进行详细化处理
+// 1.补充默认参数
+// 2.详细化路径
 func (c *Config) MakeDetailed(BasePath string) error {
 	if len(c.Processor) == 0 {
 		return errors.New("No Processor! ")
@@ -95,11 +98,7 @@ func (c *Config) MakeDetailed(BasePath string) error {
 			return errors.New("No Process! ")
 		}
 		for index2 := range c.Processor[index].Process {
-			var temps []string
-			for _, t := range c.Processor[index].Process[index2].Temp {
-				temps = append(temps, c.TempFolder+t)
-			}
-			c.Processor[index].Process[index2].Temp = temps
+			c.Processor[index].Process[index2].Temp = AppendBaseFolder(c.Processor[index].Process[index2].Temp, c.TempFolder)
 			c.Processor[index].Process[index2].Target = c.TargetFolder + c.Processor[index].Process[index2].Target
 		}
 	}
@@ -131,6 +130,7 @@ func ParseFlag() (fg *Flag, err error) {
 	return &Flag{BasePath: BasePath, ConfigFile: ConfigFile}, nil
 }
 
+// 加载配置文件
 func LoadConfig(configFile string) (config *Config, err error) {
 	if !osxu.IsExist(configFile) {
 		return nil, errors.New(fmt.Sprintf("Config \"%s\" is not exist!", configFile))
@@ -147,6 +147,7 @@ func LoadConfig(configFile string) (config *Config, err error) {
 	return config, nil
 }
 
+// 补全路径
 func AppendBaseFolder(path string, baseFolder string) string {
 	paths := strings.Split(path, ",")
 	rs := ""

@@ -33,7 +33,7 @@ func TestLoadTemplates(t *testing.T) {
 	baseDir := osxu.RunningBaseDir()
 	path1 := baseDir + "Temp/const.tmp"
 	path2 := baseDir + "Temp/const2.tmp"
-	temp, _ := LoadTemplates([]string{path1, path2})
+	temp, _ := LoadTemplates(path1 + "," + path2)
 
 	datas := []ab{{A: "A1", B: "B1", C: "B1"}, {A: "A2", B: "B2"}, {A: "A3", B: "B3"}, {A: "A4", B: "B4"}}
 	//a:={B:"B1"}
