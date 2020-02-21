@@ -1,6 +1,8 @@
 # ConstantTableProcessor
 ConstantTableProcessor can be used to Generate code files base on template.
 
+English/[中文](/README_zh.md)
+
 ## Compatibility
 go 1.11
 
@@ -10,6 +12,9 @@ go 1.11
 
 - goxc [https://github.com/laher/goxc](https://github.com/laher/goxc) 
 
+## Usage
+
+
 ## Contact
 
 xuzhuoxi 
@@ -17,4 +22,6 @@ xuzhuoxi
 <xuzhuoxi@gmail.com> or <mailxuzhuoxi@163.com>
 
 ## License
-IconGen source code is available under the MIT [License](/LICENSE).
+ConstantTableProcessor source code is available under the MIT [License](/LICENSE).
+
+

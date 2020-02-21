@@ -2,7 +2,6 @@ package lib
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -17,7 +16,7 @@ func DoProcess(proxy *ExcelProxy, tempPath string, target string) error {
 	if nil != err {
 		return err
 	}
-	fmt.Println("啦啦啦", string(bs.Bytes()))
+	//fmt.Println("啦啦啦", string(bs.Bytes()))
 	err = ioutil.WriteFile(target, bs.Bytes(), os.ModePerm)
 	if nil != err {
 		return err
