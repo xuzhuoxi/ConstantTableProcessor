@@ -16,7 +16,7 @@ go 1.11
 
 ### 下载
 
-根据系统平台，下载对应的执行文件。[这里下载](/download.md)
+根据系统平台，下载对应的执行文件。[这里下载](https://github.com/xuzhuoxi/ConstantTableProcessor/releases)
 
 ### 配置
 
@@ -29,26 +29,47 @@ go 1.11
 	模板目录，可选。若无，Temp值等于命令参数-base对应值。
 	
 - "SourceFolder": 
+	
 	来源目录，可选。若无，Source值等于命令参数-base对应值。
+	
 - "TargetFolder": 
+	
 	目标目录，可选。若无，Target值等于命令参数-base对应值。
+	
 - "SheetPrefix": 
+	
 	参与Sheet的名称前缀，可选。若无，每个Processor必须配置SheetPrefix值。
+	
 - "NickRow": 
+	
 	别名行号，可选。若无，使用Excel列号。
+	
 - "StartRow": 
+	
 	开始行号，可选。若无，每个Processor必须配置StartRow值。
+	
 - "Processor.Source": 
+	
 	来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。支持多个路径，可用英文逗号","分割。
+	
 - "Processor.SheetPrefix": 
+	
 	参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。
+	
 - "Processor.NickRow": 
+	
 	别名行号，可选。若无，NameRow值。
+	
 - "Processor.StartRow": 
+	
 	开始行号，可选。若没有则使用StartRow值。
+	
 - "Processor.Process.Temp": 
+	
 	使用模板文件名。支持多个模板路径，可用英文逗号","分割。
+	
 - "Processor.Process.Target": 
+	
 	输出文件路径。
 	
 **注意**
@@ -135,9 +156,11 @@ func (er *ExcelRow) ValueAtAxis(axis string) (value string, err error)
 `ConstantTableProcessor -base=路径 -config=配置文件路径`
 
 - -base: 
+  
   指定一个基础目录，如果不设置，则使用当前运行目录，即“./”。
   
 - -config: 
+  
   指定一个配置文件的路径。建议使用相对路径，实际的绝对路径结合-base生成。
   
 **建议**:
