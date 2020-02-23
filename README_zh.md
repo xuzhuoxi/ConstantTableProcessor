@@ -1,5 +1,5 @@
-# ConstantTableProcessor
-ConstantTableProcessor 可以根据Excel表格内容进行模板导出。通常可用于代码生成、配置生成、数据文件生成等。
+# ExcelExportTool
+ExcelExportTool 可以根据Excel表格内容进行模板导出。通常可用于代码生成、配置生成、数据文件生成等。
 
 [English](/README.md)/中文
 
@@ -10,19 +10,21 @@ go 1.11
 
 - infra-go(库依赖) [https://github.com/xuzhuoxi/infra-go](https://github.com/xuzhuoxi/infra-go)
 
+- excelize(库依赖) [https://github.com/360EntSecGroup-Skylar/excelize](https://github.com/360EntSecGroup-Skylar/excelize)
+
 - goxc(编译依赖) [https://github.com/laher/goxc](https://github.com/laher/goxc) 
 
 ## 使用方法
 
 ### 下载
 
-根据系统平台，下载对应的执行文件。[这里下载](https://github.com/xuzhuoxi/ConstantTableProcessor/releases)
+根据系统平台，下载对应的执行文件。[这里下载](https://github.com/xuzhuoxi/ExcelExportTool/releases)
 
 ### 配置
 
 #### 配置文件
 
-配置文件格式为json文件，可参考[config.json](/test/config.json)
+配置文件格式为json文件，可参考[config.json](/test/config.json)。
 
 - "TempFolder": 
 
@@ -58,11 +60,11 @@ go 1.11
 	
 - "Processor.NickRow": 
 	
-	别名行号，可选。若无，NameRow值。
+	别名行号，可选。若无，使用NickRow值。
 	
 - "Processor.StartRow": 
 	
-	开始行号，可选。若没有则使用StartRow值。
+	开始行号，可选。若无，使用StartRow值。
 	
 - "Processor.Process.Temp": 
 	
@@ -75,15 +77,16 @@ go 1.11
 **注意**
 
 - 数据源只支持Excel文件，包括xlsx文件和xls文件。
+
 - Processor和Process为数组，执行的处理数为Processor的数量乘以Process的数量。
 
 #### 模板文件
 
-模板文件格式为go语言模板，文档说明如下:
+模板文件格式为go语言模板，文档说明地址如下:
 
 [https://golang.google.cn/pkg/text/template/](https://golang.google.cn/pkg/text/template/)
 
-模板接收的数据结构体为[lib.ExcelProxy](/src/lib/excel.go)
+模板接收的数据结构体为：[lib.ExcelProxy](/src/lib/excel.go)
 
 开放属性及行为如下：
 
@@ -153,7 +156,7 @@ func (er *ExcelRow) ValueAtAxis(axis string) (value string, err error)
 
 使用命令行执行，如：
 
-`ConstantTableProcessor -base=路径 -config=配置文件路径`
+`ExcelExportTool -base=路径 -config=配置文件路径`
 
 - -base: 
   
@@ -174,6 +177,6 @@ xuzhuoxi
 <xuzhuoxi@gmail.com> 或 <mailxuzhuoxi@163.com>
 
 ## 开源许可证
-ConstantTableProcessor 源代码基于[MIT许可证](/LICENSE)进行开源。
+ExcelExportTool 源代码基于[MIT许可证](/LICENSE)进行开源。
 
 

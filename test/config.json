@@ -29,8 +29,8 @@
 
 		"Processor.Source": "来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。支持多个路径，可用英文逗号\",\"分割。",
 		"Processor.SheetPrefix": "参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。",
-		"Processor.NickRow": "别名行号，可选。若无，NameRow值。",
-		"Processor.StartRow": "开始行号，可选。若没有则使用StartRow值。",
+		"Processor.NickRow": "别名行号，可选。若无，使用NickRow值。",
+		"Processor.StartRow": "开始行号，可选。若无，使用StartRow值。",
 
 		"Processor.Process.Temp": "使用模板文件名。支持多个模板路径，可用英文逗号\",\"分割。",
 		"Processor.Process.Target": "输出文件名"

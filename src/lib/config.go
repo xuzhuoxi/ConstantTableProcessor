@@ -23,8 +23,8 @@ func (p Process) String() string {
 type Processor struct {
 	Source      string //来源文件路径，支持文件和文件夹，文件夹不支持递归子文件夹。支持多个路径，可用英文逗号\",\"分割。
 	SheetPrefix string //参与Sheet的名称前缀，可选。若没有则使用SheetPrefix值。
-	NickRow     int    //别名行号，可选。若无，NameRow值。
-	StartRow    int    //开始行号，可选。若没有则使用StartRow值。
+	NickRow     int    //别名行号，可选。若无，使用NickRow值。
+	StartRow    int    //开始行号，可选。若无，使用StartRow值。
 	Process     []Process
 }
 

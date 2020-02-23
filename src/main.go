@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/xuzhuoxi/ConstantTableProcessor/src/lib"
+	"github.com/xuzhuoxi/ExcelExportTool/src/lib"
 	"github.com/xuzhuoxi/infra-go/logx"
 	"github.com/xuzhuoxi/infra-go/mathx"
 	"github.com/xuzhuoxi/infra-go/osxu"
@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Name = "ConstantTableProcessor"
+	Name = "ExcelExportTool"
 )
 
 func main() {
