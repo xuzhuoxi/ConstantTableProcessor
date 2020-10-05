@@ -7,7 +7,7 @@ import (
 )
 
 func TestLoadExcel(t *testing.T) {
-	path := osxu.RunningBaseDir() + "Source/const.xlsx"
+	path := osxu.GetRunningDir() + "/Source/const.xlsx"
 	excelProxy := &ExcelProxy{}
 	err := excelProxy.LoadSheets(path, "Const_", 0)
 	if nil != err {

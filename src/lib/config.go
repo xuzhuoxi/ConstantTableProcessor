@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/json-iterator/go"
+	"github.com/xuzhuoxi/infra-go/filex"
 	"github.com/xuzhuoxi/infra-go/osxu"
 	"io/ioutil"
 	"path/filepath"
@@ -116,9 +117,9 @@ func ParseFlag() (fg *Flag, err error) {
 
 	BasePath := *base
 	if "" == BasePath || "." == BasePath || "./" == BasePath {
-		BasePath = osxu.RunningBaseDir()
+		BasePath = osxu.GetRunningDir()
 	} else if strings.Index(BasePath, "./") == 0 {
-		BasePath = osxu.RunningBaseDir() + BasePath
+		BasePath = osxu.GetRunningDir() + BasePath
 	}
 	if nil == config || "" == *config {
 		return nil, errors.New("Config Not Define! ")
@@ -129,7 +130,7 @@ func ParseFlag() (fg *Flag, err error) {
 
 // 加载配置文件
 func LoadConfig(configFile string) (config *Config, err error) {
-	if !osxu.IsExist(configFile) {
+	if !filex.IsExist(configFile) {
 		return nil, errors.New(fmt.Sprintf("Config \"%s\" is not exist!", configFile))
 	}
 	cfgBody, err := ioutil.ReadFile(configFile)
@@ -161,12 +162,12 @@ func linkPaths(paths string, baseFolder string) string {
 }
 
 func linkPath(path string, baseFolder string) string {
-	baseFolder = osxu.FormatDirPath(baseFolder)
+	baseFolder = filex.FormatDirPath(baseFolder)
 	if "" == path || "." == path || "./" == path {
 		return baseFolder
 	}
 	if filepath.IsAbs(path) {
-		return osxu.FormatPath(path)
+		return filex.FormatPath(path)
 	}
-	return osxu.FormatPath(baseFolder + path)
+	return filex.Combine(baseFolder, path)
 }

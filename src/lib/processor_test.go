@@ -8,7 +8,7 @@ import (
 	"text/template"
 )
 
-var tempPath = osxu.RunningBaseDir() + "test/Temp/const.tmp"
+var tempPath = osxu.GetRunningDir() + "/test/Temp/const.tmp"
 
 //func TestProcessor(t *testing.T) {
 //	temp, _ := LoadTemplate(tempPath)

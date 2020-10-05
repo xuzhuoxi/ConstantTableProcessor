@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/xuzhuoxi/infra-go/filex"
 	"github.com/xuzhuoxi/infra-go/mathx"
-	"github.com/xuzhuoxi/infra-go/osxu"
 	"github.com/xuzhuoxi/infra-go/slicex"
 	"os"
 	"strconv"
@@ -197,39 +197,28 @@ func (ep *ExcelProxy) LoadSheets(SourcePath string, SheetPrefix string, NickRow 
 
 // 加载路径下的Excel文件，多个路径用","分割
 // 支持文件夹路径
-func LoadExcels(Path string) (excels []*excelize.File, err error) {
-	paths := strings.Split(strings.TrimSpace(Path), ",")
+func LoadExcels(path string) (excels []*excelize.File, err error) {
+	paths := strings.Split(strings.TrimSpace(path), ",")
 	if len(paths) == 0 {
-		return nil, errors.New("Path Empty:" + Path)
+		return nil, errors.New("Path Empty:" + path)
 	}
 	var filePaths []string
+
 	for _, path := range paths {
-		fp := osxu.FormatPath(path)
-		if osxu.IsFolder(fp) {
-			files, err := osxu.GetFolderFileList(fp, false, func(fileInfo os.FileInfo) bool {
-				if fileInfo.IsDir() {
-					return false
-				}
-				name := fileInfo.Name()
-				if osxu.CheckExtensionName(name, ".xls") || osxu.CheckExtensionName(name, ".xlsx") {
-					return true
-				}
-				return false
-			})
-			if nil != err {
-				continue
+		fp := filex.FormatPath(path)
+		filex.Walk(fp, func(path string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				return nil
 			}
-			for _, fi := range files {
-				filePaths = append(filePaths, fi.FullPath())
+			name := info.Name()
+			if filex.CheckExt(name, "xls") || filex.CheckExt(name, "xlsx") {
+				filePaths = append(filePaths, path)
 			}
-		} else {
-			if osxu.CheckExtensionName(fp, ".xls") || osxu.CheckExtensionName(fp, ".xlsx") {
-				filePaths = append(filePaths, fp)
-			}
-		}
+			return nil
+		})
 	}
 	if len(filePaths) == 0 {
-		return nil, errors.New("Path Empty:" + Path)
+		return nil, errors.New("Path Empty:" + path)
 	}
 	for _, filePath := range filePaths {
 		excel, err := LoadExcel(filePath)

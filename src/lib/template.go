@@ -3,7 +3,7 @@ package lib
 import (
 	"errors"
 	"fmt"
-	"github.com/xuzhuoxi/infra-go/osxu"
+	"github.com/xuzhuoxi/infra-go/filex"
 	"io"
 	"io/ioutil"
 	"strings"
@@ -45,7 +45,7 @@ func LoadTemplate(tempFile string) (*Template, error) {
 	//if temp, ok := templateMap[tempFile]; ok {
 	//	return temp, nil
 	//}
-	if !osxu.IsExist(tempFile) {
+	if !filex.IsExist(tempFile) {
 		return nil, errors.New(fmt.Sprintf("Templete File Not Found: \"%s\"", tempFile))
 	}
 	body, err := ioutil.ReadFile(tempFile)
@@ -57,7 +57,7 @@ func LoadTemplate(tempFile string) (*Template, error) {
 	if nil != err {
 		return nil, err
 	}
-	_, name := osxu.SplitFilePath(tempFile)
+	_, name := filex.Split(tempFile)
 	rs := &Template{Name: name, Template: temp}
 	//templateMap[tempFile] = rs
 	return rs, nil
@@ -69,7 +69,7 @@ func LoadTemplates(tempFiles string) (*Template, error) {
 	if nil != err {
 		return nil, err
 	}
-	_, name := osxu.SplitFilePath(files[0])
+	_, name := filex.Split(files[0])
 	rs := &Template{Name: name, Template: temp}
 	return rs, nil
 }

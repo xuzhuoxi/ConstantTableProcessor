@@ -19,7 +19,7 @@ func main() {
 	logger := logx.NewLogger()
 	logger.SetConfig(logx.LogConfig{Type: logx.TypeConsole, Level: logx.LevelAll})
 	logger.SetConfig(logx.LogConfig{Type: logx.TypeRollingFile, Level: logx.LevelAll,
-		FileDir: osxu.RunningBaseDir(), FileName: Name, FileExtName: ".log", MaxSize: 200 * mathx.KB})
+		FileDir: osxu.GetRunningDir(), FileName: Name, FileExtName: ".log", MaxSize: 200 * mathx.KB})
 
 	var err error
 	//处理启动参数
