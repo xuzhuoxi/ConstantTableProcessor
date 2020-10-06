@@ -206,7 +206,7 @@ func LoadExcels(path string) (excels []*excelize.File, err error) {
 
 	for _, path := range paths {
 		fp := filex.FormatPath(path)
-		filex.Walk(fp, func(path string, info os.FileInfo, err error) error {
+		filex.WalkAll(fp, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				return nil
 			}

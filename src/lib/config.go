@@ -162,7 +162,7 @@ func linkPaths(paths string, baseFolder string) string {
 }
 
 func linkPath(path string, baseFolder string) string {
-	baseFolder = filex.FormatDirPath(baseFolder)
+	baseFolder = filex.FormatPath(baseFolder)
 	if "" == path || "." == path || "./" == path {
 		return baseFolder
 	}
